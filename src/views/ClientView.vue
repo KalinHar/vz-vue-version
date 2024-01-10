@@ -77,12 +77,13 @@ export default {
                 })
 
             this.res.forEach(r => {
-                this.client.period.push(r.createdAt.split('T')[0])
-                this.labels.push(`${r.createdAt.split('T')[0]} ст.${r.units[clientID].old}-н.${r.units[clientID].new}`)
-                this.client.data.push(r.units[clientID])
+                if (r.units[clientID]) {
+                    this.client.period.push(r.createdAt.split('T')[0])
+                    this.labels.push(`${r.createdAt.split('T')[0]} ст.${r.units[clientID].old}-н.${r.units[clientID].new}`)
+                    this.client.data.push(r.units[clientID])
+                    this.client.name = r.units[clientID].name
+                }
             })
-
-            this.client.name = this.res[0].units[clientID].name
             
             this.datasets[0].data = Array.from(this.client.data.map(cl => cl.new - cl.old))
             this.datasets[0].backgroundColor = Array.from(this.client.data.map(cl => cl.paid ? '#E0FFFF' : '#FFF0F5'))
